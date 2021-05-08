@@ -133,5 +133,17 @@ public class Patterns<K, V> implements Function<K, V> {
     return tuple(anything -> true, thenApply);
   }
 
+  /**
+   * クラスによるパターンマッチを定義します。
+   *
+   * @param clazz     キーがこのパターンに該当する条件となるクラス
+   * @param thenApply キーがこのパターンに該当する場合、clazzクラスにキャストしたキーに適用する関数
+   * @param <S>       キー型
+   * @param <O>       関数の戻り型
+   * @return パターン
+   */
+  public static <S, T extends S, O> Tuple2<Predicate<S>, Function<S, O>> whenMatch(Class<T> clazz, Function<T, O> thenApply) {
+    return tuple(clazz::isInstance, instance -> thenApply.apply(clazz.cast(instance)));
+  }
 }
 
