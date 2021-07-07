@@ -4,6 +4,7 @@ import static io.github.lambig.funcifextension.function.Functions.compositionOf;
 import static io.github.lambig.funcifextension.function.Functions.sequenceOf;
 import static io.github.lambig.patterns.Patterns.equalsTo;
 import static io.github.lambig.patterns.Patterns.orElse;
+import static io.github.lambig.patterns.Patterns.orElseThrow;
 import static io.github.lambig.patterns.Patterns.patterns;
 import static io.github.lambig.patterns.Patterns.then;
 import static io.github.lambig.patterns.Patterns.thenApply;
@@ -12,6 +13,7 @@ import static io.github.lambig.patterns.Patterns.when;
 import static io.github.lambig.patterns.Patterns.whenMatch;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
 
 
 import java.util.List;
@@ -58,6 +60,28 @@ class PatternsTest {
       List<String> actual = Stream.of(-1, 0, 1, 2, 3).map(target).collect(toList());
       //Verify
       assertThat(actual).containsExactly("0", null, "1", "2", "b");
+    }
+
+    @Test
+    void 該当キーに対応する値がなければ例外が送出されること() {
+      //SetUp
+      UnaryOperator<Integer> add1 = i -> i + 1;
+
+      Patterns<Integer, String> target =
+          patterns(
+              when(equalsTo(3), then("b")),
+              when(i -> i > 0, thenApply(Object::toString)),
+              when(i -> i < 0, thenApply(compositionOf(Object::toString, i -> i, add1))),
+              orElseThrow(v -> new RuntimeException("この値はパターンにありません: " + v)));
+
+      //Exercise
+      try {
+        List<String> actual = Stream.of(0).map(target).collect(toList());
+        //Verify
+        fail();
+      } catch (RuntimeException e) {
+        assertThat(e).hasMessage("この値はパターンにありません: 0");
+      }
     }
 
     @Test

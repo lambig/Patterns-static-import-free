@@ -134,6 +134,21 @@ public class Patterns<K, V> implements Function<K, V> {
   }
 
   /**
+   * あらゆるキーに対し例外を送出させます。
+   * 想定外パターンの対応に有用です。
+   *
+   * @param thenApply キーがこのパターンに該当する場合、キーに適用して例外を生成する関数
+   * @param <S>キー型
+   * @param <O>       関数の戻り型
+   * @return 例外処理送出処理
+   */
+  public static <S, O> Tuple2<Predicate<S>, Function<S, O>> orElseThrow(Function<S, RuntimeException> thenApply) {
+    return tuple(anything -> true, input -> {
+      throw thenApply.apply(input);
+    });
+  }
+
+  /**
    * クラスによるパターンマッチを定義します。
    *
    * @param clazz     キーがこのパターンに該当する条件となるクラス
