@@ -5,8 +5,8 @@ plugins {
 }
 
 group = 'io.github.lambig'
-archivesBaseName = 'Patterns'
-version = '1.1.0'
+archivesBaseName = 'Patterns-static-import-free'
+version = '1.2.0'
 
 sourceCompatibility = 1.8
 
@@ -69,14 +69,14 @@ test {
 //            }
 //
 //            pom.project {
-//                name 'Patterns'
+//                name 'Patterns-static-import-free'
 //                packaging 'jar'
 //                description 'easy pattern matching implementation'
-//                url 'https://github.com/lambig/Patterns'
+//                url 'https://github.com/lambig/Patterns-static-import-free'
 //
 //                scm {
-//                    connection 'scm:git:https://github.com/lambig/Patterns'
-//                    url 'https://github.com/lambig/Patterns'
+//                    connection 'scm:git:https://github.com/lambig/Patterns-static-import-free'
+//                    url 'https://github.com/lambig/Patterns-static-import-free'
 //                }
 //
 //                licenses {
