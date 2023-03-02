@@ -6,7 +6,7 @@ plugins {
 
 group = 'io.github.lambig'
 archivesBaseName = 'Patterns-static-import-free'
-version = '1.2.0'
+version = '1.2.1'
 
 sourceCompatibility = 1.8
 
@@ -51,49 +51,49 @@ test {
     test.outputs.upToDateWhen {false}
 }
 
-//signing {
-//    sign configurations.archives
-//}
-//
-//uploadArchives {
-//    repositories {
-//        mavenDeployer {
-//            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-//
-//            repository(url: "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
-//                authentication(userName: ossrhUsername, password: ossrhPassword)
-//            }
-//
-//            snapshotRepository(url: "https://s01.oss.sonatype.org/content/repositories/snapshots/") {
-//                authentication(userName: ossrhUsername, password: ossrhPassword)
-//            }
-//
-//            pom.project {
-//                name 'Patterns-static-import-free'
-//                packaging 'jar'
-//                description 'easy pattern matching implementation'
-//                url 'https://github.com/lambig/Patterns-static-import-free'
-//
-//                scm {
-//                    connection 'scm:git:https://github.com/lambig/Patterns-static-import-free'
-//                    url 'https://github.com/lambig/Patterns-static-import-free'
-//                }
-//
-//                licenses {
-//                    license {
-//                        name 'MIT License'
-//                        url 'https://opensource.org/licenses/MIT'
-//                    }
-//                }
-//
-//                developers {
-//                    developer {
-//                        id 'lambig'
-//                        name 'lambig'
-//                        email 'ceolnua51@gmail.com'
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://s01.oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'Patterns-static-import-free'
+                packaging 'jar'
+                description 'easy pattern matching implementation'
+                url 'https://github.com/lambig/Patterns-static-import-free'
+
+                scm {
+                    connection 'scm:git:https://github.com/lambig/Patterns-static-import-free'
+                    url 'https://github.com/lambig/Patterns-static-import-free'
+                }
+
+                licenses {
+                    license {
+                        name 'MIT License'
+                        url 'https://opensource.org/licenses/MIT'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'lambig'
+                        name 'lambig'
+                        email 'ceolnua51@gmail.com'
+                    }
+                }
+            }
+        }
+    }
+}
