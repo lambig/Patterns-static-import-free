@@ -1,6 +1,7 @@
 package io.github.lambig.patterns;
 
 import io.github.lambig.tuplite._2.Tuple2;
+import java.util.Arrays;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
@@ -24,24 +25,11 @@ import static io.github.lambig.tuplite._2.Tuple2._2mapWith;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class Patterns<K, V> implements Function<K, V> {
 
-    private final List<Tuple2<Predicate<K>, Function<K, V>>> map;
+    private final List<Tuple2<Predicate<K>, Function<K, V>>> list;
 
     @SafeVarargs
     public static <S, O> Patterns<S, O> of(Tuple2<Predicate<S>, Function<S, O>>... patterns) {
-        return new Patterns<>(
-                Stream.of(patterns)
-                        .collect(
-                                Collector.<
-                                        Tuple2<Predicate<S>, Function<S, O>>,
-                                        List<Tuple2<Predicate<S>, Function<S, O>>>,
-                                        List<Tuple2<Predicate<S>, Function<S, O>>>>of(
-                                        ArrayList::new,
-                                        List::add,
-                                        (a, b) -> {
-                                            a.addAll(b);
-                                            return a;
-                                        },
-                                        Collections::unmodifiableList)));
+        return new Patterns<>(Arrays.asList(patterns));
     }
 
     public static <S, O> Patterns<S, O> of(List<Tuple2<Predicate<S>, Function<S, O>>> patterns) {
@@ -55,7 +43,7 @@ public class Patterns<K, V> implements Function<K, V> {
      * @return 該当するパターンがあればその返却値、なければnull
      */
     public V get(K key) {
-        return this.map.stream()
+        return this.list.stream()
                 .filter(entry -> entry._1().test(key))
                 .findFirst()
                 .map(_2mapWith((ignored, then) -> then.apply(key)))
