@@ -24,11 +24,19 @@ import static io.github.lambig.tuplite._2.Tuple2._2mapWith;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class Patterns<K, V> implements Function<K, V> {
 
+    private final WhenValueIsNull<V> whenValueIsNull;
     private final List<Tuple2<Predicate<K>, Function<K, V>>> map;
+
 
     @SafeVarargs
     public static <S, O> Patterns<S, O> of(Tuple2<Predicate<S>, Function<S, O>>... patterns) {
+        return of(WhenValueIsNull.throwRuntimeException("nullの場合の処理が定義されていません。"), patterns);
+    }
+
+    @SafeVarargs
+    public static <S, O> Patterns<S, O> of(WhenValueIsNull<O> whenValueIsNull, Tuple2<Predicate<S>, Function<S, O>>... patterns) {
         return new Patterns<>(
+                whenValueIsNull,
                 Stream.of(patterns)
                         .collect(
                                 Collector.<
@@ -45,7 +53,11 @@ public class Patterns<K, V> implements Function<K, V> {
     }
 
     public static <S, O> Patterns<S, O> of(List<Tuple2<Predicate<S>, Function<S, O>>> patterns) {
-        return new Patterns<>(Collections.unmodifiableList(patterns));
+        return new Patterns<>(WhenValueIsNull.throwRuntimeException("nullの場合の処理が定義されていません。"), Collections.unmodifiableList(patterns));
+    }
+
+    public static <S, O> Patterns<S, O> of(WhenValueIsNull<O> whenValueIsNull, List<Tuple2<Predicate<S>, Function<S, O>>> patterns) {
+        return new Patterns<>(whenValueIsNull, Collections.unmodifiableList(patterns));
     }
 
     /**
@@ -59,7 +71,7 @@ public class Patterns<K, V> implements Function<K, V> {
                 .filter(entry -> entry._1().test(key))
                 .findFirst()
                 .map(_2mapWith((ignored, then) -> then.apply(key)))
-                .orElse(null);
+                .orElseGet(whenValueIsNull::get);
     }
 
     @Override
