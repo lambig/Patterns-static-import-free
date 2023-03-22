@@ -15,6 +15,7 @@ import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -110,6 +111,29 @@ class PatternsTest {
             } catch (RuntimeException e) {
                 assertThat(e).hasMessage("この値はパターンにありません: 0");
             }
+        }
+
+        @Test
+        void nullの場合にデフォルト値を返す() {
+            final String defaultValue = "未設定なのでdefaultを設定";
+            final Object actual = Patterns.<String, String>of(WhenValueIsNull.returnDefaultValue(defaultValue), P.orElse(v -> null)).get("init");
+            Assertions.assertEquals(defaultValue, actual);
+        }
+
+        @Test
+        void nullもそのままnullを返す() {
+            final Object actual = Patterns.<String, String>of(WhenValueIsNull.returnNull(), P.orElse(v -> null)).get("init");
+            Assertions.assertNull(actual);
+        }
+
+        @Test
+        void nullの場合に例外を返す() {
+            Assertions.assertThrows(RuntimeException.class, () -> Patterns.<String, String>of(WhenValueIsNull.throwRuntimeException(new Exception("error!")), P.orElse(v -> null)).get("init"));
+        }
+
+        @Test
+        void 未設定_例外を返す() {
+            Assertions.assertThrows(RuntimeException.class, () -> Patterns.<String, String>of(P.orElse(v -> null)).get("init"));
         }
 
         //SetUp
