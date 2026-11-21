@@ -64,7 +64,7 @@ public class Patterns<K, V> implements Function<K, V> {
      * キーが最初に該当するパターンの返却値を取得します
      *
      * @param key キー
-     * @return 該当するパターンがあればその返却値、なければnull
+     * @return 該当するパターンの返却値。未該当または結果がnullなら指定したWhenValueIsNullに従う
      */
     public V get(K key) {
         return this.map.stream()

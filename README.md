@@ -29,6 +29,7 @@ UnaryOperator<Integer> add1 = i -> i + 1;
 List<String> actual =
         Stream.of(-1, 0, 1, 2, 3)
                 .map(Patterns.of(
+                        WhenValueIsNull.returnNull(),
                         P.when(i -> i.toString().length() > 10, P.thenApply(Object::toString)),
                         P.when(P.equalsTo(3), P.then("b")),
                         P.when(i -> i < 0, P.thenApply(compositionOf(Object::toString, i -> i, add1)))))
